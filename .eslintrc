@@ -1,0 +1,19 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true,
+    "es6": true
+  },
+  "plugins": ["prettier"],
+  "ignorePatterns": ["node_modules/", "public/", "build/", ".vscode/"],
+  "extends": ["standard", "react-app", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "no-console": "warn",
+    "no-eval": "error",
+    "import/first": "error",
+    "prettier/prettier": "error"
+  }
+}
