@@ -1,0 +1,11 @@
+{
+  "replace": "__dirname",
+  "with": "https://github.com/TryAventum/dashboard/tree/main",
+  "folder": "docs",
+  "tags": [
+    {
+      "tag": "hook",
+      "file": "hooks.md"
+    }
+  ]
+}
