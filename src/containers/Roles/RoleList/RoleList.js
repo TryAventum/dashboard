@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
-import ReactTable from 'react-table'
+// import ReactTable from 'react-table'
+import ReactTableWrapper from '../../../components/UI/ReactTableWrapper/ReactTableWrapper'
 import * as actions from '../../../store/actions/index'
 import { useUndo } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
 
-export function RoleList ({ getAllRoles, deleteRole, roles }) {
+export function RoleList({ getAllRoles, deleteRole, roles }) {
   const { t, i18n } = useTranslation()
 
   const { undoList, removeWithUndo, onUndo, onDismiss, allUndoLists } = useUndo(
@@ -27,12 +28,12 @@ export function RoleList ({ getAllRoles, deleteRole, roles }) {
     {
       Header: t('Name'),
       accessor: 'name',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Label'),
       accessor: 'label',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       id: 'Edit',
@@ -48,7 +49,7 @@ export function RoleList ({ getAllRoles, deleteRole, roles }) {
             </Link>
           </div>
         )
-      }
+      },
     },
     {
       id: 'Delete',
@@ -72,13 +73,13 @@ export function RoleList ({ getAllRoles, deleteRole, roles }) {
             />
           </div>
         )
-      }
-    }
+      },
+    },
   ]
 
   return (
     <>
-      <ReactTable
+      <ReactTableWrapper
         filterable
         data={data}
         columns={columns}
@@ -99,14 +100,14 @@ export function RoleList ({ getAllRoles, deleteRole, roles }) {
 const mapStateToProps = (state) => {
   return {
     roles: state.role.roles,
-    pagination: state.role.pagination
+    pagination: state.role.pagination,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteRole: (payload, role) => dispatch(actions.deleteRole(payload, role)),
-    getAllRoles: () => dispatch(actions.getAllRoles())
+    getAllRoles: () => dispatch(actions.getAllRoles()),
   }
 }
 

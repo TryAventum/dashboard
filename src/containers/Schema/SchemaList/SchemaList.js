@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
-import ReactTable from 'react-table'
+// import ReactTable from 'react-table'
+import ReactTableWrapper from '../../../components/UI/ReactTableWrapper/ReactTableWrapper'
 import * as actions from '../../../store/actions/index'
 import { useUndo } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
@@ -66,7 +67,7 @@ export function SchemaList({ schemas, deleteSchema }) {
 
   return (
     <>
-      <ReactTable
+      <ReactTableWrapper
         filterable
         data={data}
         columns={columns}

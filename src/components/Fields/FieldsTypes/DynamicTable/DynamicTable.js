@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import ReactTable from 'react-table'
+// import ReactTable from 'react-table'
+import ReactTableWrapper from '../../../UI/ReactTableWrapper/ReactTableWrapper'
 import { v1 as uuidv1 } from 'uuid'
 import { FaBars, FaPlus, FaMinus } from 'react-icons/fa'
 import i18n from '../../../../i18n'
@@ -63,7 +64,7 @@ class DragTrComponent extends React.Component {
               ref={draggableProvided.innerRef}
               {...draggableProvided.draggableProps}
             >
-              <ReactTable.defaultProps.TrComponent
+              <ReactTableWrapper.defaultProps.TrComponent
                 style={{ width: '100%' }}
                 className={`relative`}
               >
@@ -80,16 +81,16 @@ class DragTrComponent extends React.Component {
                     className={`fill-current text-gray-500`}
                   />
                 </span>
-              </ReactTable.defaultProps.TrComponent>
+              </ReactTableWrapper.defaultProps.TrComponent>
             </div>
           )}
         </Draggable>
       )
     } else
       return (
-        <ReactTable.defaultProps.TrComponent>
+        <ReactTableWrapper.defaultProps.TrComponent>
           {children}
-        </ReactTable.defaultProps.TrComponent>
+        </ReactTableWrapper.defaultProps.TrComponent>
       )
   }
 }
@@ -102,9 +103,9 @@ class DropTbodyComponent extends React.Component {
       <Droppable droppableId="droppable">
         {(droppableProvided, droppableSnapshot) => (
           <div ref={droppableProvided.innerRef}>
-            <ReactTable.defaultProps.TbodyComponent>
+            <ReactTableWrapper.defaultProps.TbodyComponent>
               {children}
-            </ReactTable.defaultProps.TbodyComponent>
+            </ReactTableWrapper.defaultProps.TbodyComponent>
           </div>
         )}
       </Droppable>
@@ -290,7 +291,7 @@ export class DynamicTable extends Component {
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <ReactTable
+        <ReactTableWrapper
           data={this.state.data.length ? this.state.data : [this.getNewRow()]}
           columns={this.state.columns}
           showPagination={false}

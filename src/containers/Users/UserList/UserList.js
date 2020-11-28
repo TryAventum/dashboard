@@ -3,19 +3,20 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
-import ReactTable from 'react-table'
+// import ReactTable from 'react-table'
+import ReactTableWrapper from '../../../components/UI/ReactTableWrapper/ReactTableWrapper'
 import debounce from 'lodash/debounce'
 import * as actions from '../../../store/actions/index'
 import { useUndo } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
 
-export function UserList ({
+export function UserList({
   resetCurrentUserList,
   getUserPage,
   deleteUser,
   currentUserList,
   pagination,
-  loading
+  loading,
 }) {
   const { t } = useTranslation()
   const { undoList, removeWithUndo, onUndo, onDismiss, allUndoLists } = useUndo(
@@ -44,7 +45,7 @@ export function UserList ({
 
     getUserPage({
       page: state.page + 1,
-      url: `query=${encodeURIComponent(JSON.stringify(query))}`
+      url: `query=${encodeURIComponent(JSON.stringify(query))}`,
     })
   }
 
@@ -58,17 +59,17 @@ export function UserList ({
     {
       Header: t('fn'),
       accessor: 'firstName',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('ln'),
       accessor: 'lastName',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('email'),
       accessor: 'email',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       id: 'Edit',
@@ -84,7 +85,7 @@ export function UserList ({
             </Link>
           </div>
         )
-      }
+      },
     },
     {
       id: 'Delete',
@@ -101,13 +102,13 @@ export function UserList ({
             />
           </div>
         )
-      }
-    }
+      },
+    },
   ]
 
   return (
     <>
-      <ReactTable
+      <ReactTableWrapper
         loading={loading}
         pages={pagination.totalPages}
         filterable
@@ -143,7 +144,7 @@ const mapStateToProps = (state) => {
   return {
     currentUserList: state.user.currentUserList,
     loading: state.user.loadingUser,
-    pagination: state.user.pagination
+    pagination: state.user.pagination,
   }
 }
 
@@ -152,7 +153,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteUser: (payload, user) => dispatch(actions.deleteUser(payload, user)),
     getUserPage: (payload, user) =>
       dispatch(actions.getUserPage(payload, user)),
-    resetCurrentUserList: () => dispatch(actions.resetCurrentUserList())
+    resetCurrentUserList: () => dispatch(actions.resetCurrentUserList()),
   }
 }
 

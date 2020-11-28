@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import isEqual from 'lodash/isEqual'
-import ReactTable from 'react-table'
+// import ReactTable from 'react-table'
+import ReactTableWrapper from '../UI/ReactTableWrapper/ReactTableWrapper'
+// import { useTable } from 'react-table'
 import { connect } from 'react-redux'
 import { v1 } from 'uuid'
 import { Link } from 'react-router-dom'
@@ -38,6 +40,7 @@ function DynamicContentList({
   roles,
   loading,
 }) {
+  // console.log(useTable)
   const { t } = useTranslation()
 
   const firstUpdate = useRef(true)
@@ -473,7 +476,7 @@ function DynamicContentList({
   return (
     <div>
       {!show && filter && <Filter schema={schema} onFilter={onFilter} />}
-      <ReactTable
+      <ReactTableWrapper
         loading={loading}
         className={`${!data.length ? 'h-72' : ''} bg-white`}
         pages={pagination.totalPages}

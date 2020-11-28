@@ -4,14 +4,15 @@ import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
 import ReactTable from 'react-table'
+import ReactTableWrapper from '../../../components/UI/ReactTableWrapper/ReactTableWrapper'
 import * as actions from '../../../store/actions/index'
 import { useUndo } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
 
-export function CapabilityList ({
+export function CapabilityList({
   getAllCapabilities,
   capabilities,
-  deleteCapability
+  deleteCapability,
 }) {
   const { t } = useTranslation()
 
@@ -29,12 +30,12 @@ export function CapabilityList ({
     {
       Header: t('Name'),
       accessor: 'name',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Label'),
       accessor: 'label',
-      Cell: (props) => <div className={'text-center'}>{props.value}</div>
+      Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       id: 'Edit',
@@ -50,7 +51,7 @@ export function CapabilityList ({
             </Link>
           </div>
         )
-      }
+      },
     },
     {
       id: 'Delete',
@@ -74,13 +75,13 @@ export function CapabilityList ({
             />
           </div>
         )
-      }
-    }
+      },
+    },
   ]
 
   return (
     <>
-      <ReactTable
+      <ReactTableWrapper
         filterable
         data={data}
         className="bg-white"
@@ -92,7 +93,7 @@ export function CapabilityList ({
             return {
               className: allUndoLists.find((i) => rowInfo.original.id == i.id)
                 ? 'h-0 border-0 overflow-hidden'
-                : ''
+                : '',
             }
           } else {
             return {}
@@ -111,7 +112,7 @@ export function CapabilityList ({
 
 const mapStateToProps = (state) => {
   return {
-    capabilities: state.capability.capabilities
+    capabilities: state.capability.capabilities,
   }
 }
 
@@ -119,7 +120,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteCapability: (payload, capability) =>
       dispatch(actions.deleteCapability(payload, capability)),
-    getAllCapabilities: () => dispatch(actions.getAllCapabilities())
+    getAllCapabilities: () => dispatch(actions.getAllCapabilities()),
   }
 }
 
