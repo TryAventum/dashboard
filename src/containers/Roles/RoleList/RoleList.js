@@ -131,7 +131,7 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
                       <tr
                         {...row.getRowProps()}
                         className={`${
-                          index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                          index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
                         }`}
                       >
                         {row.cells.map((cell) => {
