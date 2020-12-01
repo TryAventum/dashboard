@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
-import { useTable } from 'react-table'
+import { useTable, useFilters } from 'react-table'
 import * as actions from '../../../store/actions/index'
 import { useUndo } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
@@ -20,6 +20,31 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
   }, [])
 
   const allUndoListsIds = allUndoLists.map((i) => i.id)
+
+  // Define a default UI for filtering
+  function DefaultColumnFilter({
+    column: { filterValue, preFilteredRows, setFilter },
+  }) {
+    const count = preFilteredRows.length
+
+    return (
+      <input
+        value={filterValue || ''}
+        onChange={(e) => {
+          setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+        }}
+        placeholder={`Search ${count} roles...`}
+      />
+    )
+  }
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
 
   const data = React.useMemo(
     () => roles.filter((u) => !allUndoListsIds.includes(u.id)),
@@ -42,8 +67,7 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
         id: 'Edit',
         Header: t('Edit'),
         accessor: 'id',
-        filterable: false,
-        sortable: false,
+        disableFilters: true,
         Cell: (props) => {
           return (
             <div className={'text-center'}>
@@ -58,8 +82,7 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
         id: 'Delete',
         Header: t('Delete'),
         accessor: (a) => a,
-        filterable: false,
-        sortable: false,
+        disableFilters: true,
         Cell: (props) => {
           return (
             <div className={'text-center'}>
@@ -88,7 +111,7 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data })
+  } = useTable({ columns, data, defaultColumn }, useFilters)
 
   return (
     <>
@@ -119,6 +142,9 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
                           className="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                           {column.render('Header')}
+                          <div>
+                            {column.canFilter ? column.render('Filter') : null}
+                          </div>
                         </th>
                       ))}
                     </tr>
