@@ -29,7 +29,7 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
 
     return (
       <input
-        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+        className="shadow-sm px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
         value={filterValue || ''}
         onChange={(e) => {
           setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
