@@ -1,82 +1,121 @@
-import React, { useCallback, useEffect } from 'react'
-import { connect } from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
+import isEqual from 'lodash/isEqual'
 import { useTranslation } from 'react-i18next'
 // import ReactTable from 'react-table'
 import ReactTableWrapper from '../../../components/UI/ReactTableWrapper/ReactTableWrapper'
 import debounce from 'lodash/debounce'
 import * as actions from '../../../store/actions/index'
-import { useUndo } from '../../../shared/react-hooks'
+import { useUndo, usePrevious } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
 
-export function UserList({
-  resetCurrentUserList,
-  getUserPage,
-  deleteUser,
-  currentUserList,
-  pagination,
-  loading,
-}) {
+export function UserList({}) {
   const { t } = useTranslation()
+  const currentUserList = useSelector((state) => state.user.currentUserList)
+  const loading = useSelector((state) => state.user.loadingUser)
+  const pagination = useSelector((state) => state.user.pagination)
+  const dispatch = useDispatch()
+  const [query, setQuery] = useState({ like: [] })
+  const prevQuery = usePrevious(query)
+  const deleteUser = (payload, user) =>
+    dispatch(actions.deleteUser(payload, user))
+  const getUserPage = (payload, user) =>
+    dispatch(actions.getUserPage(payload, user))
+  const resetCurrentUserList = () => dispatch(actions.resetCurrentUserList())
   const { undoList, removeWithUndo, onUndo, onDismiss, allUndoLists } = useUndo(
     deleteUser
   )
 
+  const getUsers = ({ page }) => {
+    const query = {}
+
+    getUserPage({
+      page: page,
+      url: `query=${encodeURIComponent(JSON.stringify(query))}`,
+    })
+  }
+  const getUsers2 = ({ column, value }) => {
+    const _query = { ...query }
+    // _query.like = []
+    _query.like = _query.like.filter((c) => c.column !== column)
+    // for (const q of state.filtered) {
+    _query.like.push({ column, value })
+    // }
+
+    // const sort = state.sorted.length ? state.sorted[0] : null
+    const sortBy = 'id'
+    const sortOrder = 'DESC'
+
+    _query.sortBy = sortBy
+    _query.sortOrder = sortOrder
+
+    setQuery(_query)
+
+    // getUserPage({
+    //   page: 1,
+    //   url: `query=${encodeURIComponent(JSON.stringify(_query))}`,
+    // })
+  }
+
   useEffect(() => {
+    getUserPage({
+      page: 1,
+      url: `query=${encodeURIComponent(JSON.stringify(query))}`,
+    })
+  }, [isEqual(query, prevQuery)])
+
+  const debouncedGetUsers = useCallback(debounce(getUsers, 500), [])
+
+  useEffect(() => {
+    debouncedGetUsers({ page: 1 })
     return () => {
       resetCurrentUserList()
     }
   }, [])
 
-  const getUsers = (state, instance) => {
-    const query = {}
-    query.like = []
-    for (const q of state.filtered) {
-      query.like.push({ column: q.id, value: q.value })
-    }
-
-    const sort = state.sorted.length ? state.sorted[0] : null
-    const sortBy = sort ? sort.id : 'id'
-    const sortOrder = sort ? (sort.desc ? 'DESC' : 'ASC') : 'DESC'
-
-    query.sortBy = sortBy
-    query.sortOrder = sortOrder
-
-    getUserPage({
-      page: state.page + 1,
-      url: `query=${encodeURIComponent(JSON.stringify(query))}`,
-    })
-  }
-
-  const debouncedGetUsers = useCallback(debounce(getUsers, 500), [])
-
   const allUndoListsIds = allUndoLists.map((i) => i.id)
 
   const data = currentUserList.filter((u) => !allUndoListsIds.includes(u.id))
+
+  function filterResults(rows, id, filterValue) {
+    // console.log(id, filterValue, rows)
+    getUsers2({ column: id[0], value: filterValue })
+
+    return rows
+    // return rows.filter(row => {
+    //   const rowValue = row.values[id]
+    //   return rowValue >= filterValue
+    // })
+  }
 
   const columns = [
     {
       Header: t('fn'),
       accessor: 'firstName',
+      filter: filterResults,
+      canFilter: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('ln'),
       accessor: 'lastName',
+      filter: filterResults,
+      canFilter: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('email'),
       accessor: 'email',
+      filter: filterResults,
+      canFilter: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       id: 'Edit',
       Header: t('Edit'),
       accessor: 'id',
-      filterable: false,
-      sortable: false,
       Cell: (props) => {
         return (
           <div className={'text-center'}>
@@ -91,8 +130,6 @@ export function UserList({
       id: 'Delete',
       Header: t('Delete'),
       accessor: (a) => a,
-      filterable: false,
-      sortable: false,
       Cell: (props) => {
         return (
           <div className={'text-center'}>
@@ -109,13 +146,13 @@ export function UserList({
   return (
     <>
       <ReactTableWrapper
-        loading={loading}
-        pages={pagination.totalPages}
-        filterable
-        manual
         data={data}
         columns={columns}
-        onFetchData={debouncedGetUsers}
+        loading={loading}
+        pagination={pagination}
+        onPageChange={debouncedGetUsers}
+        filterable
+        manual
         showPageSizeOptions={false}
         // Text
         previousText={t('Previous')}
@@ -140,21 +177,4 @@ export function UserList({
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    currentUserList: state.user.currentUserList,
-    loading: state.user.loadingUser,
-    pagination: state.user.pagination,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    deleteUser: (payload, user) => dispatch(actions.deleteUser(payload, user)),
-    getUserPage: (payload, user) =>
-      dispatch(actions.getUserPage(payload, user)),
-    resetCurrentUserList: () => dispatch(actions.resetCurrentUserList()),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserList)
+export default UserList
