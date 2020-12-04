@@ -2,18 +2,8 @@ import React, { useState, useReducer, useEffect } from 'react'
 import isEqual from 'lodash/isEqual'
 import Pagination from '../Pagination/Pagination'
 import { usePrevious } from '../../../shared/react-hooks'
+import Fuse from 'fuse.js'
 // import { useTable, useFilters } from 'react-table'
-
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case 'language':
-//       return { language: !state.language, profile: false }
-//     case 'profile':
-//       return { language: false, profile: !state.profile }
-//     default:
-//       throw new Error()
-//   }
-// }
 
 // Define a default UI for filtering
 function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
@@ -29,10 +19,19 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
       value={value || ''}
       onChange={(e) => {
         const eV = e.target.value
-        _setFilter((ov) => ({
-          ...ov,
-          [columnID]: eV || undefined,
-        })) // Set undefined to remove the filter entirely
+        _setFilter((ov) => {
+          if (eV) {
+            return {
+              ...ov,
+              [columnID]: eV,
+            }
+          } else {
+            delete ov[columnID]
+            return {
+              ...ov,
+            }
+          }
+        }) // Set undefined to remove the filter entirely
       }}
       // placeholder={`Search ${count} roles...`}
       placeholder={`Filter...`}
@@ -45,7 +44,7 @@ export default function ReactTableWrapper({
   data,
   pagination,
   onPageChange,
-  onFilterChange,
+  onFilterChange = null,
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
@@ -58,10 +57,24 @@ export default function ReactTableWrapper({
   }
 
   useEffect(() => {
-    if (!isEqual(filter, prevFilter)) {
+    if (onFilterChange && !isEqual(filter, prevFilter)) {
       onFilterChange(filter)
     }
   }, [filter, prevFilter])
+
+  if (Object.keys(filter).length && !onFilterChange) {
+    const options = {
+      keys: Object.keys(filter),
+    }
+
+    const fuse = new Fuse(data, options)
+
+    const result = fuse.search({
+      $and: Object.keys(filter).map((key) => ({ [key]: filter[key] })),
+    })
+
+    data = result.map((i) => i.item)
+  }
 
   // const onFilterChange = ({}) => {}
 
@@ -136,7 +149,13 @@ export default function ReactTableWrapper({
                               }
                               className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                             >
-                              <column.Cell value={row[column['accessor']]} />
+                              <column.Cell
+                                value={
+                                  typeof column.accessor === 'string'
+                                    ? row[column['accessor']]
+                                    : column.accessor(row)
+                                }
+                              />
                             </td>
                           )
                         })}

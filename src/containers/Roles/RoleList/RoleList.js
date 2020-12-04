@@ -31,18 +31,19 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
       {
         Header: t('Name'),
         accessor: 'name',
+        canFilter: true,
         Cell: (props) => <div className={'text-center'}>{props.value}</div>,
       },
       {
         Header: t('Label'),
         accessor: 'label',
+        canFilter: true,
         Cell: (props) => <div className={'text-center'}>{props.value}</div>,
       },
       {
         id: 'Edit',
         Header: t('Edit'),
         accessor: 'id',
-        disableFilters: true,
         Cell: (props) => {
           return (
             <div className={'text-center'}>
@@ -57,7 +58,6 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
         id: 'Delete',
         Header: t('Delete'),
         accessor: (a) => a,
-        disableFilters: true,
         Cell: (props) => {
           return (
             <div className={'text-center'}>
