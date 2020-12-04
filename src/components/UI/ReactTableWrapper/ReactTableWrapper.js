@@ -39,6 +39,40 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
   )
 }
 
+// Ascending Sorting
+const ascSort = (column) => {
+  return (a, b) => {
+    var nameA = a[column].toUpperCase() // ignore upper and lowercase
+    var nameB = b[column].toUpperCase() // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1
+    }
+    if (nameA > nameB) {
+      return 1
+    }
+
+    // names must be equal
+    return 0
+  }
+}
+
+// Descending Sorting
+const descSort = (column) => {
+  return (a, b) => {
+    var nameA = a[column].toUpperCase() // ignore upper and lowercase
+    var nameB = b[column].toUpperCase() // ignore upper and lowercase
+    if (nameA > nameB) {
+      return -1
+    }
+    if (nameA < nameB) {
+      return 1
+    }
+
+    // names must be equal
+    return 0
+  }
+}
+
 export default function ReactTableWrapper({
   columns,
   data,
@@ -66,6 +100,11 @@ export default function ReactTableWrapper({
   if (Object.keys(filter).length && !onFilterChange) {
     const options = {
       keys: Object.keys(filter),
+      // sortFn: ascSort,
+      // sortFn: (a, b) => {
+      //   console.log('a', a.item[0].v)
+      //   console.log('b', b)
+      // },
     }
 
     const fuse = new Fuse(data, options)
@@ -74,7 +113,15 @@ export default function ReactTableWrapper({
       $and: Object.keys(filter).map((key) => ({ [key]: filter[key] })),
     })
 
-    data = result.map((i) => i.item)
+    if (sort.sortBy) {
+      if (sort.sortOrder === 'ASC') {
+        data = result.map((i) => i.item).sort(ascSort(sort.sortBy))
+      } else {
+        data = result.map((i) => i.item).sort(descSort(sort.sortBy))
+      }
+    } else {
+      data = result.map((i) => i.item)
+    }
   }
 
   // const onFilterChange = ({}) => {}
