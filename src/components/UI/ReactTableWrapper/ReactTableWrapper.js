@@ -76,7 +76,7 @@ const descSort = (column) => {
 export default function ReactTableWrapper({
   columns,
   data,
-  pagination,
+  pagination = null,
   onPageChange,
   onFilterChange = null,
 }) {
@@ -271,13 +271,15 @@ export default function ReactTableWrapper({
           </div>
         </div>
       </div> */}
-      <Pagination
-        activePage={activePage}
-        onPageChange={handlePaginationChange}
-        totalPages={
-          pagination && pagination.totalPages ? pagination.totalPages : 1
-        }
-      />
+      {pagination && (
+        <Pagination
+          activePage={activePage}
+          onPageChange={handlePaginationChange}
+          totalPages={
+            pagination && pagination.totalPages ? pagination.totalPages : 1
+          }
+        />
+      )}
     </>
   )
 }
