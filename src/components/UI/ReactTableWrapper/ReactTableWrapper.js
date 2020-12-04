@@ -3,6 +3,7 @@ import isEqual from 'lodash/isEqual'
 import Pagination from '../Pagination/Pagination'
 import { usePrevious } from '../../../shared/react-hooks'
 import Fuse from 'fuse.js'
+import { el } from 'date-fns/locale'
 // import { useTable, useFilters } from 'react-table'
 
 // Define a default UI for filtering
@@ -17,6 +18,7 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
       className="shadow-sm px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
       // value={filterValue || ''}
       value={value || ''}
+      onClick={(e) => e.stopPropagation()}
       onChange={(e) => {
         const eV = e.target.value
         _setFilter((ov) => {
@@ -97,6 +99,7 @@ export default function ReactTableWrapper({
     }
   }, [filter, prevFilter])
 
+  // Filtering the rows
   if (Object.keys(filter).length && !onFilterChange) {
     const options = {
       keys: Object.keys(filter),
@@ -113,14 +116,15 @@ export default function ReactTableWrapper({
       $and: Object.keys(filter).map((key) => ({ [key]: filter[key] })),
     })
 
-    if (sort.sortBy) {
-      if (sort.sortOrder === 'ASC') {
-        data = result.map((i) => i.item).sort(ascSort(sort.sortBy))
-      } else {
-        data = result.map((i) => i.item).sort(descSort(sort.sortBy))
-      }
+    data = result.map((i) => i.item)
+  }
+
+  // Sorting the rows
+  if (sort.sortBy) {
+    if (sort.sortOrder === 'ASC') {
+      data = data.sort(ascSort(sort.sortBy))
     } else {
-      data = result.map((i) => i.item)
+      data = data.sort(descSort(sort.sortBy))
     }
   }
 
@@ -159,8 +163,34 @@ export default function ReactTableWrapper({
                       return (
                         <th
                           key={columnID}
+                          onClick={() => {
+                            if (!column.canSort) {
+                              return
+                            }
+                            if (columnID === sort.sortBy) {
+                              setSort((ov) => ({
+                                ...ov,
+                                sortOrder:
+                                  ov.sortOrder === 'DESC' ? 'ASC' : 'DESC',
+                              }))
+                            } else {
+                              setSort((ov) => ({
+                                ...ov,
+                                sortBy: columnID,
+                              }))
+                            }
+                          }}
                           scope="col"
-                          className="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          className={`px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                            sort.sortBy === columnID && sort.sortOrder === 'ASC'
+                              ? 'border-t-4'
+                              : ''
+                          } ${
+                            sort.sortBy === columnID &&
+                            sort.sortOrder === 'DESC'
+                              ? 'border-b-4'
+                              : ''
+                          } ${column.canSort ? 'cursor-pointer' : ''}`}
                         >
                           {column.Header}
                           <div className="mt-1">

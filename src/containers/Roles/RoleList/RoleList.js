@@ -32,12 +32,14 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
         Header: t('Name'),
         accessor: 'name',
         canFilter: true,
+        canSort: true,
         Cell: (props) => <div className={'text-center'}>{props.value}</div>,
       },
       {
         Header: t('Label'),
         accessor: 'label',
         canFilter: true,
+        canSort: true,
         Cell: (props) => <div className={'text-center'}>{props.value}</div>,
       },
       {
