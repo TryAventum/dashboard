@@ -48,6 +48,7 @@ export default function ReactTableWrapper({
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
+  const [sort, setSort] = useState({ sortBy: null, sortOrder: 'ASC' })
   const prevFilter = usePrevious(filter)
   // const [filterState, dispatchFilter] = useReducer(reducer, [])
 
