@@ -151,6 +151,7 @@ export function UserList({}) {
         loading={loading}
         pagination={pagination}
         onPageChange={debouncedGetUsers}
+        onFilterChange={(_filter) => console.log(_filter)}
         filterable
         manual
         showPageSizeOptions={false}
