@@ -223,7 +223,6 @@ export class DynamicTable extends Component {
   }
 
   renderEditable = (cellInfo) => {
-    // console.log(cellInfo)
     let value = ''
     try {
       value =
