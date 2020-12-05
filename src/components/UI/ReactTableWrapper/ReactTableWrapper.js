@@ -98,7 +98,7 @@ export const TrComponent = React.forwardRef(
               className={`px-6 py-4 whitespace-nowrap text-sm font-medium flex-1 text-gray-900 ${tdClassName}`}
             >
               <column.Cell
-                index={_index}
+                index={index}
                 column={column}
                 value={
                   typeof column.accessor === 'string'

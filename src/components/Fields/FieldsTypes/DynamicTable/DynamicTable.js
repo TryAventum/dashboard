@@ -228,7 +228,7 @@ export class DynamicTable extends Component {
     try {
       value =
         this.state.data && this.state.data.length
-          ? this.state.data[cellInfo.index][cellInfo.column.id]
+          ? this.state.data[cellInfo.index][cellInfo.column.accessor]
           : ''
     } catch (error) {}
 
@@ -238,7 +238,7 @@ export class DynamicTable extends Component {
         className="w-full"
         onChange={(e) => {
           const data = [...this.state.data]
-          data[cellInfo.index][cellInfo.column.id] = e.target.value
+          data[cellInfo.index][cellInfo.column.accessor] = e.target.value
           this.setState({ data }, () => {
             this.props.onChange(data)
           })
