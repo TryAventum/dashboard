@@ -3,7 +3,6 @@ import isEqual from 'lodash/isEqual'
 import Pagination from '../Pagination/Pagination'
 import { usePrevious } from '../../../shared/react-hooks'
 import Fuse from 'fuse.js'
-import { el } from 'date-fns/locale'
 // import { useTable, useFilters } from 'react-table'
 
 // Define a default UI for filtering
@@ -75,12 +74,87 @@ const descSort = (column) => {
   }
 }
 
-export default function ReactTableWrapper({
+export const TrComponent = React.forwardRef(
+  (
+    { row, index, columns, children, className, tdClassName, ...props },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        {...props}
+        className={`flex justify-between ${
+          index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
+        } ${className}`}
+      >
+        {columns.map((column, _index) => {
+          return (
+            <div
+              key={
+                typeof column.accessor === 'string'
+                  ? column.accessor
+                  : column.id
+              }
+              className={`px-6 py-4 whitespace-nowrap text-sm font-medium flex-1 text-gray-900 ${tdClassName}`}
+            >
+              <column.Cell
+                index={_index}
+                column={column}
+                value={
+                  typeof column.accessor === 'string'
+                    ? row[column['accessor']]
+                    : column.accessor(row)
+                }
+              />
+            </div>
+          )
+        })}
+        {children}
+      </div>
+    )
+  }
+)
+
+export function TbodyComponent({
+  data,
+  columns,
+  TrWrapperComponent,
+  children,
+}) {
+  return (
+    <tbody>
+      {data.map((row, index) => {
+        // return children({ row, index, columns })
+        // const id = row.id
+        // if (TrWrapperComponent) {
+        //   return (
+        //     <TrWrapperComponent>
+        //       <TrComponent
+        //         key={row.id}
+        //         columns={columns}
+        //         row={row}
+        //         index={index}
+        //       />
+        //     </TrWrapperComponent>
+        //   )
+        // }
+        return (
+          <TrComponent key={row.id} columns={columns} row={row} index={index} />
+        )
+      })}
+    </tbody>
+  )
+}
+
+export function ReactTableWrapper({
   columns,
   data,
   pagination = null,
+  children,
   onPageChange,
   onFilterChange = null,
+  TbodyWrapperComponent = null,
+  TrWrapperComponent = null,
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
@@ -152,16 +226,16 @@ export default function ReactTableWrapper({
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                  <tr>
+              <div className="table min-w-full divide-y divide-gray-200">
+                <div className="thead">
+                  <div className="flex justify-between">
                     {columns.map((column) => {
                       const columnID =
                         typeof column.accessor === 'string'
                           ? column.accessor
                           : column.id
                       return (
-                        <th
+                        <div
                           key={columnID}
                           onClick={() => {
                             if (!column.canSort) {
@@ -181,7 +255,7 @@ export default function ReactTableWrapper({
                             }
                           }}
                           scope="col"
-                          className={`px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                          className={`flex-1 text-center px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider ${
                             sort.sortBy === columnID && sort.sortOrder === 'ASC'
                               ? 'border-t-4'
                               : ''
@@ -203,45 +277,32 @@ export default function ReactTableWrapper({
                               />
                             ) : null}
                           </div>
-                        </th>
+                        </div>
                       )
                     })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((row, index) => {
-                    return (
-                      <tr
-                        key={row.id}
-                        className={`${
-                          index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
-                        }`}
-                      >
-                        {columns.map((column, _index) => {
-                          return (
-                            <td
-                              key={
-                                typeof column.accessor === 'string'
-                                  ? column.accessor
-                                  : column.id
-                              }
-                              className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                            >
-                              <column.Cell
-                                value={
-                                  typeof column.accessor === 'string'
-                                    ? row[column['accessor']]
-                                    : column.accessor(row)
-                                }
-                              />
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                  </div>
+                </div>
+                {children({
+                  TrWrapperComponent,
+                  data,
+                  columns,
+                })}
+                {/* {TbodyWrapperComponent ? (
+                  <TbodyWrapperComponent>
+                    <TbodyComponent
+                      TrWrapperComponent={TrWrapperComponent}
+                      data={data}
+                      columns={columns}
+                    />
+                  </TbodyWrapperComponent>
+                ) : (
+                  <TbodyComponent
+                    TrWrapperComponent={TrWrapperComponent}
+                    data={data}
+                    columns={columns}
+                  />
+                )} */}
+              </div>
             </div>
           </div>
         </div>
@@ -311,5 +372,31 @@ export default function ReactTableWrapper({
         />
       )}
     </>
+  )
+}
+
+export default function FullTable(props) {
+  return (
+    <ReactTableWrapper {...props}>
+      {({ data, columns }) => {
+        return (
+          <div className="tbody flex flex-col">
+            {data.map((row, index) => {
+              return (
+                <TrComponent
+                  key={row.id}
+                  columns={columns}
+                  row={row}
+                  index={index}
+                />
+              )
+            })}
+          </div>
+        )
+      }}
+    </ReactTableWrapper>
+    // <ReactTableWrapper {...props}>
+    //   {(args) => <TbodyComponent {...args} />}
+    // </ReactTableWrapper>
   )
 }

@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 // import ReactTable from 'react-table'
-import ReactTableWrapper from '../../../UI/ReactTableWrapper/ReactTableWrapper'
+import {
+  ReactTableWrapper,
+  TrComponent,
+} from '../../../UI/ReactTableWrapper/ReactTableWrapper'
 import { v1 as uuidv1 } from 'uuid'
 import { FaBars, FaPlus, FaMinus } from 'react-icons/fa'
 import i18n from '../../../../i18n'
@@ -47,6 +50,49 @@ const reorder = (list, startIndex, endIndex) => {
 
   return result
 }
+// export function TrWrapperComponent({ children = null, rowInfo }) {
+//   if (rowInfo) {
+//     const { original, index } = rowInfo
+//     const { id } = original
+//     const _uuidv1 = original.uuidv1
+//     const specialId = id || _uuidv1 || uuidv1()
+
+//     return (
+//       <Draggable key={specialId} index={index} draggableId={specialId + ''}>
+//         {(draggableProvided, draggableSnapshot) => (
+//           <div
+//             ref={draggableProvided.innerRef}
+//             {...draggableProvided.draggableProps}
+//           >
+//             <ReactTableWrapper.defaultProps.TrComponent
+//               style={{ width: '100%' }}
+//               className={`relative`}
+//             >
+//               {children}
+//               <span
+//                 {...draggableProvided.dragHandleProps}
+//                 className={`absolute ${
+//                   i18n.dir() === 'ltr' ? 'right-0' : 'left-0'
+//                 }`}
+//                 style={{ top: 'calc(50% - 10px)' }}
+//               >
+//                 <FaBars
+//                   title={i18n.t('DragToReorder')}
+//                   className={`fill-current text-gray-500`}
+//                 />
+//               </span>
+//             </ReactTableWrapper.defaultProps.TrComponent>
+//           </div>
+//         )}
+//       </Draggable>
+//     )
+//   } else
+//     return (
+//       <ReactTableWrapper.defaultProps.TrComponent>
+//         {children}
+//       </ReactTableWrapper.defaultProps.TrComponent>
+//     )
+// }
 
 class DragTrComponent extends React.Component {
   render() {
@@ -177,6 +223,7 @@ export class DynamicTable extends Component {
   }
 
   renderEditable = (cellInfo) => {
+    // console.log(cellInfo)
     let value = ''
     try {
       value =
@@ -294,18 +341,76 @@ export class DynamicTable extends Component {
         <ReactTableWrapper
           data={this.state.data.length ? this.state.data : [this.getNewRow()]}
           columns={this.state.columns}
-          showPagination={false}
-          TrComponent={DragTrComponent}
-          TbodyComponent={DropTbodyComponent}
-          getTrProps={this.getTrProps}
-          // defaultPageSize={1000}
-          pageSize={this.state.pageSize}
-          // minRows={0}
-          noDataText={this.props.t('noDataText')}
-        />
+        >
+          {({ data, columns }) => {
+            return (
+              <Droppable droppableId="droppable">
+                {(droppableProvided, droppableSnapshot) => (
+                  <div
+                    ref={droppableProvided.innerRef}
+                    className="tbody flex flex-col"
+                  >
+                    {data.map((row, index) => {
+                      const specialId = row.id || row.uuidv1 || uuidv1()
+                      return (
+                        <Draggable
+                          key={specialId}
+                          index={index}
+                          draggableId={specialId + ''}
+                        >
+                          {(draggableProvided, draggableSnapshot) => (
+                            <TrComponent
+                              ref={draggableProvided.innerRef}
+                              {...draggableProvided.draggableProps}
+                              className="relative"
+                              columns={columns}
+                              row={row}
+                              index={index}
+                            >
+                              <span
+                                {...draggableProvided.dragHandleProps}
+                                className={`absolute ${
+                                  i18n.dir() === 'ltr' ? 'right-0' : 'left-0'
+                                }`}
+                                style={{ top: 'calc(50% - 10px)' }}
+                              >
+                                <FaBars
+                                  title={i18n.t('DragToReorder')}
+                                  className={`fill-current text-gray-500`}
+                                />
+                              </span>
+                            </TrComponent>
+                          )}
+                        </Draggable>
+                      )
+                    })}
+                    {droppableProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            )
+          }}
+        </ReactTableWrapper>
         {validationMessage}
       </DragDropContext>
     )
+    // return (
+    //   <DragDropContext onDragEnd={this.onDragEnd}>
+    //     <ReactTableWrapper
+    //       data={this.state.data.length ? this.state.data : [this.getNewRow()]}
+    //       columns={this.state.columns}
+    //       showPagination={false}
+    //       TrComponent={DragTrComponent}
+    //       TbodyComponent={DropTbodyComponent}
+    //       getTrProps={this.getTrProps}
+    //       // defaultPageSize={1000}
+    //       pageSize={this.state.pageSize}
+    //       // minRows={0}
+    //       noDataText={this.props.t('noDataText')}
+    //     />
+    //     {validationMessage}
+    //   </DragDropContext>
+    // )
   }
 }
 
