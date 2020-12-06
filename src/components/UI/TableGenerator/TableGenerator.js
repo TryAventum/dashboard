@@ -90,14 +90,14 @@ export const TrComponent = React.forwardRef(
     const finalClassName = `flex justify-between ${
       index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
     } ${className}`
-    let passedProps = { ...props, className: finalClassName }
+    let finalProps = { ...props, className: finalClassName }
     if (getTrGroupProps) {
-      passedProps = {
-        ...getTrGroupProps({ row, props: passedProps }),
+      finalProps = {
+        ...getTrGroupProps({ row, props: finalProps }),
       }
     }
     return (
-      <div ref={ref} {...passedProps}>
+      <div ref={ref} {...finalProps}>
         {columns.map((column, _index) => {
           return (
             <div
@@ -135,6 +135,7 @@ export function ReactTableWrapper({
   onFilterChange = null,
   onSortChange = null,
   getTrGroupProps = null,
+  getTbodyProps = null,
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
@@ -250,6 +251,7 @@ export function ReactTableWrapper({
                   data,
                   columns,
                   getTrGroupProps,
+                  getTbodyProps,
                 })}
               </div>
             </div>
@@ -272,9 +274,15 @@ export function ReactTableWrapper({
 export default function FullTable(props) {
   return (
     <ReactTableWrapper {...props}>
-      {({ data, columns, getTrGroupProps }) => {
+      {({ data, columns, getTrGroupProps, getTbodyProps }) => {
+        let finalProps = { className: 'tbody flex flex-col' }
+        if (getTbodyProps) {
+          finalProps = {
+            ...getTbodyProps({ props: finalProps }),
+          }
+        }
         return (
-          <div className="tbody flex flex-col">
+          <div {...finalProps}>
             {data.map((row, index) => {
               return (
                 <TrComponent
