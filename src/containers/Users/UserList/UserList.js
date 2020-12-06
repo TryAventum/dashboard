@@ -77,7 +77,7 @@ export function UserList({}) {
     // })
   }
 
-  const debouncedGetUsers = useCallback(debounce(getUsers, 500), [])
+  // const debouncedGetUsers = useCallback(debounce(getUsers, 500), [])
   const debouncedGetUserPage = useCallback(debounce(getUserPage, 500), [])
 
   useEffect(() => {
@@ -175,7 +175,12 @@ export function UserList({}) {
         columns={columns}
         loading={loading}
         pagination={pagination}
-        onPageChange={debouncedGetUsers}
+        onPageChange={({ page }) => {
+          getUserPage({
+            page,
+            url: `query=${encodeURIComponent(JSON.stringify(query))}`,
+          })
+        }}
         onFilterChange={(_filter) => getUsers({ filter: _filter })}
         onSortChange={(_sort) => getUsers({ sort: _sort })}
         filterable
