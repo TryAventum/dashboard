@@ -126,6 +126,22 @@ export const TrComponent = React.forwardRef(
   }
 )
 
+export const TbodyComponent = React.forwardRef(
+  ({ children, getTbodyProps }, ref) => {
+    let finalProps = { className: 'tbody flex flex-col' }
+    if (getTbodyProps) {
+      finalProps = {
+        ...getTbodyProps({ props: finalProps }),
+      }
+    }
+    return (
+      <div ref={ref} {...finalProps}>
+        {children}
+      </div>
+    )
+  }
+)
+
 export function ReactTableWrapper({
   columns,
   data,
@@ -275,14 +291,8 @@ export default function FullTable(props) {
   return (
     <ReactTableWrapper {...props}>
       {({ data, columns, getTrGroupProps, getTbodyProps }) => {
-        let finalProps = { className: 'tbody flex flex-col' }
-        if (getTbodyProps) {
-          finalProps = {
-            ...getTbodyProps({ props: finalProps }),
-          }
-        }
         return (
-          <div {...finalProps}>
+          <TbodyComponent getTbodyProps={getTbodyProps}>
             {data.map((row, index) => {
               return (
                 <TrComponent
@@ -294,7 +304,7 @@ export default function FullTable(props) {
                 />
               )
             })}
-          </div>
+          </TbodyComponent>
         )
       }}
     </ReactTableWrapper>

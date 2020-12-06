@@ -509,9 +509,10 @@ function DynamicContentList({
         // getNoDataProps={() => ({
         //   className: 'bg-green-100',
         // })}
-        getTbodyProps={(props) => {
+        getTbodyProps={({ props }) => {
           return {
-            className: 'contents',
+            ...props,
+            className: props.className + ' contents',
           }
         }}
         // getTdProps={(state, rowInfo, column, instance) => {

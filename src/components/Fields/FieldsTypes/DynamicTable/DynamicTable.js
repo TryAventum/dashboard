@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import {
   ReactTableWrapper,
   TrComponent,
+  TbodyComponent,
 } from '../../../UI/TableGenerator/TableGenerator'
 import { v1 as uuidv1 } from 'uuid'
 import { FaBars, FaPlus, FaMinus } from 'react-icons/fa'
@@ -276,13 +277,13 @@ export class DynamicTable extends Component {
           data={this.state.data.length ? this.state.data : [this.getNewRow()]}
           columns={this.state.columns}
         >
-          {({ data, columns }) => {
+          {({ data, columns, getTrGroupProps, getTbodyProps }) => {
             return (
               <Droppable droppableId="droppable">
                 {(droppableProvided, droppableSnapshot) => (
-                  <div
+                  <TbodyComponent
                     ref={droppableProvided.innerRef}
-                    className="tbody flex flex-col"
+                    getTbodyProps={getTbodyProps}
                   >
                     {data.map((row, index) => {
                       const specialId = row.id || row.uuidv1 || uuidv1()
@@ -300,6 +301,7 @@ export class DynamicTable extends Component {
                               columns={columns}
                               row={row}
                               index={index}
+                              getTrGroupProps={getTrGroupProps}
                             >
                               <span
                                 {...draggableProvided.dragHandleProps}
@@ -319,7 +321,7 @@ export class DynamicTable extends Component {
                       )
                     })}
                     {droppableProvided.placeholder}
-                  </div>
+                  </TbodyComponent>
                 )}
               </Droppable>
             )
