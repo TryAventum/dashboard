@@ -150,6 +150,7 @@ export function ReactTableWrapper({
   onPageChange,
   onFilterChange = null,
   onSortChange = null,
+  onChange = null,
   getTrGroupProps = null,
   getTbodyProps = null,
 }) {
@@ -163,17 +164,26 @@ export function ReactTableWrapper({
   const handlePaginationChange = (e, { activePage }) => {
     setActivePage(activePage)
     onPageChange({ page: activePage })
+    if (onChange) {
+      onChange({ activePage, filter, sort })
+    }
   }
 
   useEffect(() => {
     if (prevFilter && onFilterChange && !isEqual(filter, prevFilter)) {
       onFilterChange(filter)
+      if (onChange) {
+        onChange({ activePage, filter, sort })
+      }
     }
   }, [filter, prevFilter])
 
   useEffect(() => {
     if (prevSort && onSortChange && !isEqual(sort, prevSort)) {
       onSortChange(sort)
+      if (onChange) {
+        onChange({ activePage, filter, sort })
+      }
     }
   }, [sort, prevSort])
 
