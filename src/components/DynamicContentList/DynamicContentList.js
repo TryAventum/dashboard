@@ -536,31 +536,18 @@ function DynamicContentList({
         //   : ''
         //   }
         // }}
-        getTrGroupProps={(state, rowInfo) => {
-          if (rowInfo && rowInfo.row) {
+        getTrGroupProps={({ row, props }) => {
+          if (row) {
             return {
-              onClick: (e, handleOriginal) => {
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-                if (handleOriginal) {
-                  handleOriginal()
-                }
-
-                if (selectable) {
-                  // select(e, rowInfo.original.id)
-                }
-              },
-              className: allUndoLists.find((i) => rowInfo.original.id == i.id)
-                ? 'h-0 border-0 overflow-hidden'
-                : selectedState.includes(rowInfo.original.id)
-                ? 'bg-green-200 selected'
-                : '',
+              ...props,
+              className: allUndoLists.find((i) => row.id == i.id)
+                ? props.className + ' h-0 border-0 overflow-hidden'
+                : selectedState.includes(row.id)
+                ? props.className + ' bg-green-200 selected'
+                : props.className,
             }
           } else {
-            return {}
+            return props
           }
         }}
       />

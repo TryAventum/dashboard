@@ -97,7 +97,7 @@ export function CapabilityList({
                 : props.className,
             }
           } else {
-            return {}
+            return props
           }
         }}
       />
