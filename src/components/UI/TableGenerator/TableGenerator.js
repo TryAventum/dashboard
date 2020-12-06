@@ -27,10 +27,9 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
               [columnID]: eV,
             }
           } else {
-            delete ov[columnID]
-            return {
-              ...ov,
-            }
+            const nv = { ...ov }
+            delete nv[columnID]
+            return nv
           }
         }) // Set undefined to remove the filter entirely
       }}
