@@ -137,13 +137,13 @@ export function ReactTableWrapper({
   }
 
   useEffect(() => {
-    if (onFilterChange && !isEqual(filter, prevFilter)) {
+    if (prevFilter && onFilterChange && !isEqual(filter, prevFilter)) {
       onFilterChange(filter)
     }
   }, [filter, prevFilter])
 
   useEffect(() => {
-    if (onSortChange && !isEqual(sort, prevSort)) {
+    if (prevSort && onSortChange && !isEqual(sort, prevSort)) {
       onSortChange(sort)
     }
   }, [sort, prevSort])

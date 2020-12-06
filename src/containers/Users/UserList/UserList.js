@@ -17,7 +17,11 @@ export function UserList({}) {
   const loading = useSelector((state) => state.user.loadingUser)
   const pagination = useSelector((state) => state.user.pagination)
   const dispatch = useDispatch()
-  const [query, setQuery] = useState({ like: [] })
+  const [query, setQuery] = useState({
+    like: [],
+    sortBy: 'id',
+    sortOrder: 'DESC',
+  })
   const prevQuery = usePrevious(query)
   const deleteUser = (payload, user) =>
     dispatch(actions.deleteUser(payload, user))
@@ -28,28 +32,42 @@ export function UserList({}) {
     deleteUser
   )
 
-  const getUsers = ({ page }) => {
-    const query = {}
+  // const getUsers = ({ page }) => {
+  //   const query = {}
 
-    getUserPage({
-      page: page,
-      url: `query=${encodeURIComponent(JSON.stringify(query))}`,
-    })
-  }
-  const getUsers2 = ({ column, value }) => {
+  //   getUserPage({
+  //     page: page,
+  //     url: `query=${encodeURIComponent(JSON.stringify(query))}`,
+  //   })
+  // }
+  const getUsers = ({ sort, filter }) => {
     const _query = { ...query }
-    // _query.like = []
-    _query.like = _query.like.filter((c) => c.column !== column)
+
+    if (filter) {
+      _query.like = []
+      for (const column in filter) {
+        if (filter.hasOwnProperty(column)) {
+          const value = filter[column]
+          _query.like.push({ column, value })
+        }
+      }
+    }
+
+    // _query.like = _query.like.filter((c) => c.column !== column)
     // for (const q of state.filtered) {
-    _query.like.push({ column, value })
+    // _query.like.push({ column, value })
     // }
 
     // const sort = state.sorted.length ? state.sorted[0] : null
-    const sortBy = 'id'
-    const sortOrder = 'DESC'
+    if (sort) {
+      _query.sortBy = sort.sortBy
+      _query.sortOrder = sort.sortOrder
+    }
+    // const sortBy = 'id'
+    // const sortOrder = 'DESC'
 
-    _query.sortBy = sortBy
-    _query.sortOrder = sortOrder
+    // _query.sortBy = sortBy
+    // _query.sortOrder = sortOrder
 
     setQuery(_query)
 
@@ -59,17 +77,21 @@ export function UserList({}) {
     // })
   }
 
+  const debouncedGetUsers = useCallback(debounce(getUsers, 500), [])
+  const debouncedGetUserPage = useCallback(debounce(getUserPage, 500), [])
+
   useEffect(() => {
-    getUserPage({
+    debouncedGetUserPage({
       page: 1,
       url: `query=${encodeURIComponent(JSON.stringify(query))}`,
     })
   }, [isEqual(query, prevQuery)])
 
-  const debouncedGetUsers = useCallback(debounce(getUsers, 500), [])
-
   useEffect(() => {
-    debouncedGetUsers({ page: 1 })
+    getUserPage({
+      page: 1,
+      url: `query=${encodeURIComponent(JSON.stringify(query))}`,
+    })
     return () => {
       resetCurrentUserList()
     }
@@ -154,8 +176,8 @@ export function UserList({}) {
         loading={loading}
         pagination={pagination}
         onPageChange={debouncedGetUsers}
-        onFilterChange={(_filter) => console.log(_filter)}
-        onSortChange={(_sort) => console.log(_sort)}
+        onFilterChange={(_filter) => getUsers({ filter: _filter })}
+        onSortChange={(_sort) => getUsers({ sort: _sort })}
         filterable
         manual
         showPageSizeOptions={false}
