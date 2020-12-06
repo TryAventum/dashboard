@@ -422,11 +422,11 @@ function DynamicContentList({
     )
   }
 
-  const getContents = (state, instance) => {
+  const getContents = ({ page }) => {
     if (!show) {
       getContentPage(
         {
-          page: state.page + 1,
+          page: page,
           perPage: perPage,
           url: `query=${encodeURIComponent(JSON.stringify(query))}`,
           id: uuidv1,
@@ -435,6 +435,10 @@ function DynamicContentList({
       )
     }
   }
+
+  useEffect(() => {
+    getContents({ page: 1 })
+  }, [])
 
   /**
    * The render method of the DynamicContentList component just called.
@@ -480,6 +484,8 @@ function DynamicContentList({
         loading={loading}
         className={`${!data.length ? 'h-72' : ''} bg-white`}
         pages={pagination.totalPages}
+        pagination={pagination}
+        onPageChange={getContents}
         manual
         sortable={false}
         data={data}

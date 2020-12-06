@@ -75,17 +75,29 @@ const descSort = (column) => {
 
 export const TrComponent = React.forwardRef(
   (
-    { row, index, columns, children, className, tdClassName, ...props },
+    {
+      row,
+      index,
+      columns,
+      children,
+      className,
+      getTrGroupProps,
+      tdClassName,
+      ...props
+    },
     ref
   ) => {
+    const finalClassName = `flex justify-between ${
+      index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
+    } ${className}`
+    let passedProps = { ...props, className: finalClassName }
+    if (getTrGroupProps) {
+      passedProps = {
+        ...getTrGroupProps({ row, props: passedProps }),
+      }
+    }
     return (
-      <div
-        ref={ref}
-        {...props}
-        className={`flex justify-between ${
-          index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
-        } ${className}`}
-      >
+      <div ref={ref} {...passedProps}>
         {columns.map((column, _index) => {
           return (
             <div
@@ -122,6 +134,7 @@ export function ReactTableWrapper({
   onPageChange,
   onFilterChange = null,
   onSortChange = null,
+  getTrGroupProps = null,
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
@@ -236,6 +249,7 @@ export function ReactTableWrapper({
                 {children({
                   data,
                   columns,
+                  getTrGroupProps,
                 })}
               </div>
             </div>
@@ -258,7 +272,7 @@ export function ReactTableWrapper({
 export default function FullTable(props) {
   return (
     <ReactTableWrapper {...props}>
-      {({ data, columns }) => {
+      {({ data, columns, getTrGroupProps }) => {
         return (
           <div className="tbody flex flex-col">
             {data.map((row, index) => {
@@ -268,6 +282,7 @@ export default function FullTable(props) {
                   columns={columns}
                   row={row}
                   index={index}
+                  getTrGroupProps={getTrGroupProps}
                 />
               )
             })}

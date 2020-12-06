@@ -88,12 +88,13 @@ export function CapabilityList({
         columns={columns}
         showPagination={false}
         pageSize={data.length}
-        getTrGroupProps={(state, rowInfo) => {
-          if (rowInfo && rowInfo.row) {
+        getTrGroupProps={({ row, props }) => {
+          if (row) {
             return {
-              className: allUndoLists.find((i) => rowInfo.original.id == i.id)
-                ? 'h-0 border-0 overflow-hidden'
-                : '',
+              ...props,
+              className: allUndoLists.find((i) => row.id == i.id)
+                ? props.className + ' h-0 border-0 overflow-hidden'
+                : props.className,
             }
           } else {
             return {}
