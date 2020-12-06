@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import {
   ReactTableWrapper,
   TrComponent,
-} from '../../../UI/ReactTableWrapper/ReactTableWrapper'
+} from '../../../UI/TableGenerator/TableGenerator'
 import { v1 as uuidv1 } from 'uuid'
 import { FaBars, FaPlus, FaMinus } from 'react-icons/fa'
 import i18n from '../../../../i18n'

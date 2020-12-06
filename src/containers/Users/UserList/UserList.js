@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa'
 import isEqual from 'lodash/isEqual'
 import { useTranslation } from 'react-i18next'
 // import ReactTable from 'react-table'
-import ReactTableWrapper from '../../../components/UI/ReactTableWrapper/ReactTableWrapper'
+import TableGenerator from '../../../components/UI/TableGenerator/TableGenerator'
 import debounce from 'lodash/debounce'
 import * as actions from '../../../store/actions/index'
 import { useUndo, usePrevious } from '../../../shared/react-hooks'
@@ -145,7 +145,7 @@ export function UserList({}) {
 
   return (
     <>
-      <ReactTableWrapper
+      <TableGenerator
         data={data}
         columns={columns}
         loading={loading}

@@ -115,37 +115,6 @@ export const TrComponent = React.forwardRef(
   }
 )
 
-export function TbodyComponent({
-  data,
-  columns,
-  TrWrapperComponent,
-  children,
-}) {
-  return (
-    <tbody>
-      {data.map((row, index) => {
-        // return children({ row, index, columns })
-        // const id = row.id
-        // if (TrWrapperComponent) {
-        //   return (
-        //     <TrWrapperComponent>
-        //       <TrComponent
-        //         key={row.id}
-        //         columns={columns}
-        //         row={row}
-        //         index={index}
-        //       />
-        //     </TrWrapperComponent>
-        //   )
-        // }
-        return (
-          <TrComponent key={row.id} columns={columns} row={row} index={index} />
-        )
-      })}
-    </tbody>
-  )
-}
-
 export function ReactTableWrapper({
   columns,
   data,
@@ -395,8 +364,5 @@ export default function FullTable(props) {
         )
       }}
     </ReactTableWrapper>
-    // <ReactTableWrapper {...props}>
-    //   {(args) => <TbodyComponent {...args} />}
-    // </ReactTableWrapper>
   )
 }
