@@ -79,37 +79,40 @@ export function UserList({}) {
 
   const data = currentUserList.filter((u) => !allUndoListsIds.includes(u.id))
 
-  function filterResults(rows, id, filterValue) {
-    // console.log(id, filterValue, rows)
-    getUsers2({ column: id[0], value: filterValue })
+  // function filterResults(rows, id, filterValue) {
+  //   // console.log(id, filterValue, rows)
+  //   getUsers2({ column: id[0], value: filterValue })
 
-    return rows
-    // return rows.filter(row => {
-    //   const rowValue = row.values[id]
-    //   return rowValue >= filterValue
-    // })
-  }
+  //   return rows
+  //   // return rows.filter(row => {
+  //   //   const rowValue = row.values[id]
+  //   //   return rowValue >= filterValue
+  //   // })
+  // }
 
   const columns = [
     {
       Header: t('fn'),
       accessor: 'firstName',
-      filter: filterResults,
+      // filter: filterResults,
       canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('ln'),
       accessor: 'lastName',
-      filter: filterResults,
+      // filter: filterResults,
       canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('email'),
       accessor: 'email',
-      filter: filterResults,
+      // filter: filterResults,
       canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
@@ -152,6 +155,7 @@ export function UserList({}) {
         pagination={pagination}
         onPageChange={debouncedGetUsers}
         onFilterChange={(_filter) => console.log(_filter)}
+        onSortChange={(_sort) => console.log(_sort)}
         filterable
         manual
         showPageSizeOptions={false}

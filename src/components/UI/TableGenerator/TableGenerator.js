@@ -122,13 +122,13 @@ export function ReactTableWrapper({
   children,
   onPageChange,
   onFilterChange = null,
-  TbodyWrapperComponent = null,
-  TrWrapperComponent = null,
+  onSortChange = null,
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
   const [sort, setSort] = useState({ sortBy: null, sortOrder: 'ASC' })
   const prevFilter = usePrevious(filter)
+  const prevSort = usePrevious(sort)
   // const [filterState, dispatchFilter] = useReducer(reducer, [])
 
   const handlePaginationChange = (e, { activePage }) => {
@@ -142,15 +142,16 @@ export function ReactTableWrapper({
     }
   }, [filter, prevFilter])
 
+  useEffect(() => {
+    if (onSortChange && !isEqual(sort, prevSort)) {
+      onSortChange(sort)
+    }
+  }, [sort, prevSort])
+
   // Filtering the rows
   if (Object.keys(filter).length && !onFilterChange) {
     const options = {
       keys: Object.keys(filter),
-      // sortFn: ascSort,
-      // sortFn: (a, b) => {
-      //   console.log('a', a.item[0].v)
-      //   console.log('b', b)
-      // },
     }
 
     const fuse = new Fuse(data, options)
@@ -163,31 +164,13 @@ export function ReactTableWrapper({
   }
 
   // Sorting the rows
-  if (sort.sortBy) {
+  if (sort.sortBy && !onSortChange) {
     if (sort.sortOrder === 'ASC') {
       data = data.sort(ascSort(sort.sortBy))
     } else {
       data = data.sort(descSort(sort.sortBy))
     }
   }
-
-  // const onFilterChange = ({}) => {}
-
-  // const defaultColumn = React.useMemo(
-  //   () => ({
-  //     // Let's set up our default Filter UI
-  //     Filter: DefaultColumnFilter,
-  //   }),
-  //   []
-  // )
-
-  // const {
-  //   getTableProps,
-  //   getTableBodyProps,
-  //   headerGroups,
-  //   rows,
-  //   prepareRow,
-  // } = useTable({ columns, data, defaultColumn }, useFilters)
 
   return (
     <>
@@ -252,85 +235,14 @@ export function ReactTableWrapper({
                   </div>
                 </div>
                 {children({
-                  TrWrapperComponent,
                   data,
                   columns,
                 })}
-                {/* {TbodyWrapperComponent ? (
-                  <TbodyWrapperComponent>
-                    <TbodyComponent
-                      TrWrapperComponent={TrWrapperComponent}
-                      data={data}
-                      columns={columns}
-                    />
-                  </TbodyWrapperComponent>
-                ) : (
-                  <TbodyComponent
-                    TrWrapperComponent={TrWrapperComponent}
-                    data={data}
-                    columns={columns}
-                  />
-                )} */}
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="flex flex-col">
-        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table
-                {...getTableProps()}
-                className="min-w-full divide-y divide-gray-200"
-              >
-                <thead>
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          {...column.getHeaderProps()}
-                          scope="col"
-                          className="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          {column.render('Header')}
-                          <div className="mt-1">
-                            {column.canFilter ? column.render('Filter') : null}
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                  {rows.map((row, index) => {
-                    prepareRow(row)
-                    return (
-                      <tr
-                        {...row.getRowProps()}
-                        className={`${
-                          index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
-                        }`}
-                      >
-                        {row.cells.map((cell) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div> */}
       {pagination && (
         <Pagination
           activePage={activePage}
