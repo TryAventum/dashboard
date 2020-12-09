@@ -183,21 +183,6 @@ export function UserList({}) {
         }}
         onFilterChange={(_filter) => getUsers({ filter: _filter })}
         onSortChange={(_sort) => getUsers({ sort: _sort })}
-        filterable
-        manual
-        showPageSizeOptions={false}
-        // Text
-        previousText={t('Previous')}
-        nextText={t('Next')}
-        loadingText={t('Loading...')}
-        noDataText={t('Nousersfound')}
-        pageText={t('Page')}
-        ofText={t('of')}
-        rowsText={t('rows')}
-        // Accessibility Labels
-        pageJumpText={t('jumptopage')}
-        rowsSelectorText={t('rowsperpage')}
-        className="bg-white"
       />
       <Undo
         onUndo={onUndo}
