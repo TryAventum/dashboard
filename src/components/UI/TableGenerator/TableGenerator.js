@@ -3,6 +3,7 @@ import isEqual from 'lodash/isEqual'
 import Pagination from '../Pagination/Pagination'
 import { usePrevious } from '../../../shared/react-hooks'
 import Fuse from 'fuse.js'
+import Loader from '../Loader/Loader'
 // import { useTable, useFilters } from 'react-table'
 
 // Define a default UI for filtering
@@ -153,6 +154,7 @@ export function ReactTableWrapper({
   onChange = null,
   getTrGroupProps = null,
   getTbodyProps = null,
+  loading,
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
@@ -211,12 +213,21 @@ export function ReactTableWrapper({
     }
   }
 
+  const commonBoarder = 'border-b border-gray-200 sm:rounded-lg'
+
   return (
     <>
-      <div className="flex flex-col">
+      <div className="relative flex flex-col">
+        {loading && (
+          <div
+            className={`absolute flex justify-center items-center inset-0 bg-cool-gray-100 opacity-75 ${commonBoarder}`}
+          >
+            <Loader className="w-8 text-gray-400" />
+          </div>
+        )}
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <div className={`shadow overflow-hidden ${commonBoarder}`}>
               <div className="table min-w-full divide-y divide-gray-200">
                 <div className="thead">
                   <div className="flex justify-between">
