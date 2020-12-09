@@ -1,6 +1,7 @@
 import React from 'react'
 import createPaginationItems from './createPaginationItems/createPaginationItems'
 import { useTranslation } from 'react-i18next'
+import Loader from '../Loader/Loader'
 
 const PageItem = ({
   active,
@@ -56,7 +57,12 @@ const EllipsisItem = () => {
   )
 }
 
-export default function Pagination({ activePage, onPageChange, totalPages }) {
+export default function Pagination({
+  activePage,
+  onPageChange,
+  totalPages,
+  loading,
+}) {
   const items = createPaginationItems({
     activePage,
     boundaryRange: 2,
@@ -74,7 +80,16 @@ export default function Pagination({ activePage, onPageChange, totalPages }) {
   const prevItem = <NextPrevItem onClick={onPageChange} {...prev} />
 
   return (
-    <div className="pagination bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+    <div
+      className={`pagination relative bg-white px-4 py-3 flex items-center justify-between sm:px-6 border-t border-gray-200`}
+    >
+      {loading && (
+        <div
+          className={`absolute flex justify-center items-center inset-0 bg-cool-gray-100 opacity-75 z-10`}
+        >
+          <Loader className="w-6 text-gray-400" />
+        </div>
+      )}
       <div className="flex-1 flex justify-between sm:hidden">
         {prevItem}
         {nextItem}

@@ -299,6 +299,7 @@ export function ReactTableWrapper({
         <Pagination
           activePage={activePage}
           onPageChange={handlePaginationChange}
+          loading={loading}
           totalPages={
             pagination && pagination.totalPages ? pagination.totalPages : 1
           }
