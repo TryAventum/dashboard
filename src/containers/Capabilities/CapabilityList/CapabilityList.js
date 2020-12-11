@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
-import ReactTableWrapper from '../../../components/UI/TableGenerator/TableGenerator'
+import TableGenerator from '../../../components/UI/TableGenerator/TableGenerator'
 import * as actions from '../../../store/actions/index'
 import { useUndo } from '../../../shared/react-hooks'
 import Undo from '../../../components/UI/Undo/Undo'
@@ -84,7 +84,7 @@ export function CapabilityList({
 
   return (
     <>
-      <ReactTableWrapper
+      <TableGenerator
         data={data}
         columns={columns}
         getTrGroupProps={({ row, props }) => {

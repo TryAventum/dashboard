@@ -10,7 +10,7 @@ import {
 import Input from '../../../components/UI/Input/Input'
 import Loader from '../../../components/UI/Loader/Loader'
 import Button from '../../../components/UI/Button/Button'
-import ReactTableWrapper from '../../../components/UI/TableGenerator/TableGenerator'
+import TableGenerator from '../../../components/UI/TableGenerator/TableGenerator'
 import { useTranslation } from 'react-i18next'
 import * as actions from '../../../store/actions/index'
 import aventum from '../../../aventum'
@@ -232,7 +232,7 @@ export function ExtensionList({
           {t('Install')}
         </Button>
       </div>
-      <ReactTableWrapper
+      <TableGenerator
         filterable
         data={data}
         columns={columns}

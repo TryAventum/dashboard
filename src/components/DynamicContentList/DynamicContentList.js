@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import isEqual from 'lodash/isEqual'
-import ReactTableWrapper from '../UI/TableGenerator/TableGenerator'
+import TableGenerator from '../UI/TableGenerator/TableGenerator'
 import { connect } from 'react-redux'
 import { v1 } from 'uuid'
 import { Link } from 'react-router-dom'
@@ -183,7 +183,7 @@ function DynamicContentList({
         this
       )
 
-      const reactTableDynamicHeaders = HeaderCellsFields.map((p) => {
+      const tableGeneratorDynamicHeaders = HeaderCellsFields.map((p) => {
         return {
           id: p.id,
           Header: p.fields.find((h) => h.name === 'label').value,
@@ -197,7 +197,7 @@ function DynamicContentList({
       })
 
       if (selectable) {
-        reactTableDynamicHeaders.unshift({
+        tableGeneratorDynamicHeaders.unshift({
           id: 'SelectItem',
           accessor: (c) => c,
           Cell: (props) => {
@@ -215,7 +215,7 @@ function DynamicContentList({
       }
 
       const colums = [
-        ...reactTableDynamicHeaders,
+        ...tableGeneratorDynamicHeaders,
         {
           id: 'DataPreview',
           Header: t('DataPreview'),
@@ -478,7 +478,7 @@ function DynamicContentList({
   return (
     <div>
       {!show && filter && <Filter schema={schema} onFilter={onFilter} />}
-      <ReactTableWrapper
+      <TableGenerator
         loading={loading}
         className={`${!data.length ? 'h-72' : ''} bg-white`}
         pages={pagination.totalPages}

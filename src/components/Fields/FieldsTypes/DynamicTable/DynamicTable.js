@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-  ReactTableWrapper,
+  TableGenerator,
   TrComponent,
   TbodyComponent,
 } from '../../../UI/TableGenerator/TableGenerator'
@@ -50,49 +50,6 @@ const reorder = (list, startIndex, endIndex) => {
 
   return result
 }
-// export function TrWrapperComponent({ children = null, rowInfo }) {
-//   if (rowInfo) {
-//     const { original, index } = rowInfo
-//     const { id } = original
-//     const _uuidv1 = original.uuidv1
-//     const specialId = id || _uuidv1 || uuidv1()
-
-//     return (
-//       <Draggable key={specialId} index={index} draggableId={specialId + ''}>
-//         {(draggableProvided, draggableSnapshot) => (
-//           <div
-//             ref={draggableProvided.innerRef}
-//             {...draggableProvided.draggableProps}
-//           >
-//             <ReactTableWrapper.defaultProps.TrComponent
-//               style={{ width: '100%' }}
-//               className={`relative`}
-//             >
-//               {children}
-//               <span
-//                 {...draggableProvided.dragHandleProps}
-//                 className={`absolute ${
-//                   i18n.dir() === 'ltr' ? 'right-0' : 'left-0'
-//                 }`}
-//                 style={{ top: 'calc(50% - 10px)' }}
-//               >
-//                 <FaBars
-//                   title={i18n.t('DragToReorder')}
-//                   className={`fill-current text-gray-500`}
-//                 />
-//               </span>
-//             </ReactTableWrapper.defaultProps.TrComponent>
-//           </div>
-//         )}
-//       </Draggable>
-//     )
-//   } else
-//     return (
-//       <ReactTableWrapper.defaultProps.TrComponent>
-//         {children}
-//       </ReactTableWrapper.defaultProps.TrComponent>
-//     )
-// }
 
 export class DynamicTable extends Component {
   constructor(props) {
@@ -272,7 +229,7 @@ export class DynamicTable extends Component {
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <ReactTableWrapper
+        <TableGenerator
           data={this.state.data.length ? this.state.data : [this.getNewRow()]}
           columns={this.state.columns}
         >
@@ -325,27 +282,10 @@ export class DynamicTable extends Component {
               </Droppable>
             )
           }}
-        </ReactTableWrapper>
+        </TableGenerator>
         {validationMessage}
       </DragDropContext>
     )
-    // return (
-    //   <DragDropContext onDragEnd={this.onDragEnd}>
-    //     <ReactTableWrapper
-    //       data={this.state.data.length ? this.state.data : [this.getNewRow()]}
-    //       columns={this.state.columns}
-    //       showPagination={false}
-    //       TrComponent={DragTrComponent}
-    //       TbodyComponent={DropTbodyComponent}
-    //       getTrProps={this.getTrProps}
-    //       // defaultPageSize={1000}
-    //       pageSize={this.state.pageSize}
-    //       // minRows={0}
-    //       noDataText={this.props.t('noDataText')}
-    //     />
-    //     {validationMessage}
-    //   </DragDropContext>
-    // )
   }
 }
 

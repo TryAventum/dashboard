@@ -142,7 +142,7 @@ export const TbodyComponent = React.forwardRef(
   }
 )
 
-export function ReactTableWrapper({
+export function TableGenerator({
   columns,
   data,
   pagination = null,
@@ -314,7 +314,7 @@ export function ReactTableWrapper({
 
 export default function FullTable(props) {
   return (
-    <ReactTableWrapper {...props}>
+    <TableGenerator {...props}>
       {({ data, columns, getTrGroupProps, getTbodyProps }) => {
         return (
           <TbodyComponent getTbodyProps={getTbodyProps}>
@@ -332,6 +332,6 @@ export default function FullTable(props) {
           </TbodyComponent>
         )
       }}
-    </ReactTableWrapper>
+    </TableGenerator>
   )
 }
