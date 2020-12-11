@@ -480,33 +480,11 @@ function DynamicContentList({
       {!show && filter && <Filter schema={schema} onFilter={onFilter} />}
       <TableGenerator
         loading={loading}
-        className={`${!data.length ? 'h-72' : ''} bg-white`}
-        pages={pagination.totalPages}
-        pagination={pagination}
+        pagination={!show ? pagination : null}
         onPageChange={getContents}
-        manual
-        sortable={false}
         data={data}
         columns={columns}
         onFetchData={getContents}
-        showPageSizeOptions={false}
-        showPagination={!show}
-        pageSize={data ? data.length : null}
-        // className={`${selectable ? 'cursor-pointer' : ''}`}
-        // Text
-        previousText={t('Previous')}
-        nextText={t('Next')}
-        loadingText={t('Loading...')}
-        noDataText={t('Noitemsfound')}
-        pageText={t('Page')}
-        ofText={t('of')}
-        rowsText={t('rows')}
-        // Accessibility Labels
-        pageJumpText={t('jumptopage')}
-        rowsSelectorText={t('rowsperpage')}
-        // getNoDataProps={() => ({
-        //   className: 'bg-green-100',
-        // })}
         getTbodyProps={({ props }) => {
           return {
             ...props,
