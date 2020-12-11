@@ -11,7 +11,6 @@ import AppLoader from './components/UI/AppLoader/AppLoader'
 import i18n from './i18n'
 
 import './tailwind.css'
-import './react-table.css'
 import 'dropzone/dist/dropzone.css'
 import './index.css'
 import App from './App'
@@ -48,22 +47,22 @@ async function loadActiveExtensions() {
 
   //Load extensions
   if (activeExtensions.length) {
-    let mustLoadedExtensions = activeExtensions.map(p => {
+    let mustLoadedExtensions = activeExtensions.map((p) => {
       return import(
         /* webpackIgnore: true */ `${p.aventum.path
           .replace('package.json', 'index.js')
           .replace(/\\/g, '/')}`
       )
-        .then(r => p)
-        .catch(e => {
+        .then((r) => p)
+        .catch((e) => {
           console.error(
             `Extension ${p.name} not loaded so deactivated, make sure its files available in the dashboard/extensions folder before activating it.`
           )
           axios.patch(`exts/dashboard-not-exist`, { extension: p }).then(
-            response => {
+            (response) => {
               aventum.hooks.doActionSync('ExtensionNotExist', response, p)
             },
-            error => {
+            (error) => {
               aventum.hooks.doActionSync('ExtensionNotExist', error, p)
             }
           )
@@ -101,7 +100,7 @@ async function run() {
     option: optionReducer,
     upload: uploadReducer,
     shared: sharedReducer,
-    form: formReducer
+    form: formReducer,
   })
 
   const store = createStore(

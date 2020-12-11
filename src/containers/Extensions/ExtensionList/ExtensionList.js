@@ -10,7 +10,6 @@ import {
 import Input from '../../../components/UI/Input/Input'
 import Loader from '../../../components/UI/Loader/Loader'
 import Button from '../../../components/UI/Button/Button'
-// import ReactTable from 'react-table'
 import ReactTableWrapper from '../../../components/UI/TableGenerator/TableGenerator'
 import { useTranslation } from 'react-i18next'
 import * as actions from '../../../store/actions/index'

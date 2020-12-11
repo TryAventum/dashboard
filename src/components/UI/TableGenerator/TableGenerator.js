@@ -4,7 +4,6 @@ import Pagination from '../Pagination/Pagination'
 import { usePrevious } from '../../../shared/react-hooks'
 import Fuse from 'fuse.js'
 import Loader from '../Loader/Loader'
-// import { useTable, useFilters } from 'react-table'
 
 // Define a default UI for filtering
 function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {

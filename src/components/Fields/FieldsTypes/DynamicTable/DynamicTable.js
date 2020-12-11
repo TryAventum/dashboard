@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import ReactTable from 'react-table'
 import {
   ReactTableWrapper,
   TrComponent,

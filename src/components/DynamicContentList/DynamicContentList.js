@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import isEqual from 'lodash/isEqual'
-// import ReactTable from 'react-table'
 import ReactTableWrapper from '../UI/TableGenerator/TableGenerator'
-// import { useTable } from 'react-table'
 import { connect } from 'react-redux'
 import { v1 } from 'uuid'
 import { Link } from 'react-router-dom'
@@ -515,28 +513,6 @@ function DynamicContentList({
             className: props.className + ' contents',
           }
         }}
-        // getTdProps={(state, rowInfo, column, instance) => {
-        //   if (!selectable) {
-        //     return {}
-        //   }
-        //   return {
-        // onClick: (e, handleOriginal) => {
-        //   select(e, rowInfo.original.id)
-
-        //   // IMPORTANT! React-Table uses onClick internally to trigger
-        //   // events like expanding SubComponents and pivots.
-        //   // By default a custom 'onClick' handler will override this functionality.
-        //   // If you want to fire the original onClick handler, call the
-        //   // 'handleOriginal' function.
-        //   if (handleOriginal) {
-        //     handleOriginal()
-        //   }
-        // },
-        // className: selectedState.includes(rowInfo.original.id)
-        //   ? 'bg-green-200'
-        //   : ''
-        //   }
-        // }}
         getTrGroupProps={({ row, props }) => {
           if (row) {
             return {
