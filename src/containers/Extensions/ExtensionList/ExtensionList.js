@@ -125,39 +125,49 @@ export function ExtensionList({
     {
       Header: t('Name'),
       accessor: 'name',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Description'),
       accessor: 'description',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Version'),
       accessor: 'version',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Author'),
       accessor: 'author.name',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('License'),
       accessor: 'license',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Target'),
       accessor: 'aventum.target',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       id: 'Active',
       Header: t('Active'),
       accessor: (e) => e,
-      filterable: false,
-      sortable: false,
       Cell: (props) => {
         const loading =
           (activateExtensionLoading === props.value.name &&
@@ -186,8 +196,6 @@ export function ExtensionList({
       id: 'Delete',
       Header: t('Delete'),
       accessor: (a) => a,
-      filterable: false,
-      sortable: false,
       Cell: (props) => {
         return (
           <div className={'flex items-center justify-center text-red-400'}>
@@ -232,14 +240,7 @@ export function ExtensionList({
           {t('Install')}
         </Button>
       </div>
-      <TableGenerator
-        filterable
-        data={data}
-        columns={columns}
-        showPagination={false}
-        pageSize={data.length}
-        className="bg-white"
-      />
+      <TableGenerator data={data} columns={columns} />
       <DataModal
         doneClicked={doneClicked}
         modalOpen={modalOpen}
