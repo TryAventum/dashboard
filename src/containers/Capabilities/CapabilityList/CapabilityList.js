@@ -30,11 +30,15 @@ export function CapabilityList({
     {
       Header: t('Name'),
       accessor: 'name',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Label'),
       accessor: 'label',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
@@ -82,12 +86,8 @@ export function CapabilityList({
   return (
     <>
       <ReactTableWrapper
-        filterable
         data={data}
-        className="bg-white"
         columns={columns}
-        showPagination={false}
-        pageSize={data.length}
         getTrGroupProps={({ row, props }) => {
           if (row) {
             return {

@@ -85,7 +85,6 @@ export function RoleList({ getAllRoles, deleteRole, roles }) {
   return (
     <>
       <ReactTableWrapper data={data} columns={columns} />
-
       <Undo
         onUndo={onUndo}
         onDismiss={onDismiss}
