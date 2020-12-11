@@ -62,6 +62,7 @@ export default function Pagination({
   onPageChange,
   totalPages,
   loading,
+  className,
 }) {
   const items = createPaginationItems({
     activePage,
@@ -81,7 +82,7 @@ export default function Pagination({
 
   return (
     <div
-      className={`pagination relative bg-white px-4 py-3 flex items-center justify-between sm:px-6 border-t border-gray-200`}
+      className={`pagination relative flex items-center justify-between ${className}`}
     >
       {loading && (
         <div

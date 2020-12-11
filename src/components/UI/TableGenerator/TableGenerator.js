@@ -155,6 +155,7 @@ export function ReactTableWrapper({
   getTrGroupProps = null,
   getTbodyProps = null,
   loading,
+  paginationClassName = '',
 }) {
   const [activePage, setActivePage] = useState(1)
   const [filter, setFilter] = useState({})
@@ -296,14 +297,17 @@ export function ReactTableWrapper({
         </div>
       </div>
       {pagination && (
-        <Pagination
-          activePage={activePage}
-          onPageChange={handlePaginationChange}
-          loading={loading}
-          totalPages={
-            pagination && pagination.totalPages ? pagination.totalPages : 1
-          }
-        />
+        <div className="flex justify-end py-3">
+          <Pagination
+            activePage={activePage}
+            onPageChange={handlePaginationChange}
+            className={paginationClassName}
+            loading={loading}
+            totalPages={
+              pagination && pagination.totalPages ? pagination.totalPages : 1
+            }
+          />
+        </div>
       )}
     </>
   )

@@ -6,7 +6,7 @@ import Pagination from '../../UI/Pagination/Pagination'
 import Undo from '../../UI/Undo/Undo'
 import { useUndo } from '../../../shared/react-hooks'
 
-export function UploadList ({
+export function UploadList({
   getUploads,
   picker,
   selectedUploads,
@@ -15,7 +15,7 @@ export function UploadList ({
   uploads,
   style,
   deleteUpload,
-  pagination
+  pagination,
 }) {
   const [activePage, setActivePage] = useState(1)
 
@@ -64,15 +64,15 @@ export function UploadList ({
           <div style={style} className="flex flex-wrap uploads">
             {hasUploads
               ? uploads.map((i) => (
-                <UploadListItem
-                  deleteItem={(item) => removeWithUndo(item)}
-                  key={i.id}
-                  item={i}
-                  selected={selectedUploads}
-                  select={select}
-                  picker={picker}
-                />
-              ))
+                  <UploadListItem
+                    deleteItem={(item) => removeWithUndo(item)}
+                    key={i.id}
+                    item={i}
+                    selected={selectedUploads}
+                    select={select}
+                    picker={picker}
+                  />
+                ))
               : null}
           </div>
         </div>
@@ -80,15 +80,17 @@ export function UploadList ({
       <div>
         <div>
           {hasUploads && (
-            <Pagination
-              activePage={activePage}
-              onPageChange={handlePaginationChange}
-              totalPages={
-                pagination && pagination.totalPages
-                  ? pagination.totalPages
-                  : 1
-              }
-            />
+            <div className="flex justify-end py-2">
+              <Pagination
+                activePage={activePage}
+                onPageChange={handlePaginationChange}
+                totalPages={
+                  pagination && pagination.totalPages
+                    ? pagination.totalPages
+                    : 1
+                }
+              />
+            </div>
           )}
         </div>
       </div>
@@ -107,7 +109,7 @@ const mapStateToProps = (state) => {
     loading: state.upload.loading,
     uploads: state.upload.uploads,
     selectedUploads: state.upload.selectedUploads,
-    pagination: state.upload.pagination
+    pagination: state.upload.pagination,
   }
 }
 
@@ -116,7 +118,7 @@ const mapDispatchToProps = (dispatch) => {
     getUploads: (payload) => dispatch(actions.getUploads(payload)),
     setSelectedUploads: (payload) =>
       dispatch(actions.setSelectedUploads(payload)),
-    deleteUpload: (payload) => dispatch(actions.deleteUpload(payload))
+    deleteUpload: (payload) => dispatch(actions.deleteUpload(payload)),
   }
 }
 
