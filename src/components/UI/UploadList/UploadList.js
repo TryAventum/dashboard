@@ -16,6 +16,7 @@ export function UploadList({
   style,
   deleteUpload,
   pagination,
+  loading,
 }) {
   const [activePage, setActivePage] = useState(1)
 
@@ -83,6 +84,7 @@ export function UploadList({
             <div className="flex justify-end py-2">
               <Pagination
                 activePage={activePage}
+                loading={loading}
                 onPageChange={handlePaginationChange}
                 totalPages={
                   pagination && pagination.totalPages
