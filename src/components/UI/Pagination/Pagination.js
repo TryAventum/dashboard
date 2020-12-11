@@ -97,7 +97,7 @@ export default function Pagination({
       </div>
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
-          <nav className="relative z-0 inline-flex shadow-sm">
+          <nav className="relative z-0 inline-flex shadow-sm flex-wrap">
             {items.map((item) => {
               switch (item.type) {
                 case 'prevItem':
