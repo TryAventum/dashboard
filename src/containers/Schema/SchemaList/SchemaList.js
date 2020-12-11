@@ -22,11 +22,15 @@ export function SchemaList({ schemas, deleteSchema }) {
     {
       Header: t('Name'),
       accessor: 'name',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
       Header: t('Title'),
       accessor: 'title',
+      canFilter: true,
+      canSort: true,
       Cell: (props) => <div className={'text-center'}>{props.value}</div>,
     },
     {
@@ -66,14 +70,7 @@ export function SchemaList({ schemas, deleteSchema }) {
 
   return (
     <>
-      <TableGenerator
-        filterable
-        data={data}
-        columns={columns}
-        showPagination={false}
-        pageSize={data.length}
-        className="bg-white"
-      />
+      <TableGenerator data={data} columns={columns} />
       <Undo
         onUndo={onUndo}
         onDismiss={onDismiss}

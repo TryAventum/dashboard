@@ -101,11 +101,7 @@ export const TrComponent = React.forwardRef(
         {columns.map((column, _index) => {
           return (
             <div
-              key={
-                typeof column.accessor === 'string'
-                  ? column.accessor
-                  : column.id
-              }
+              key={column.id || column.accessor}
               className={`px-6 py-4 whitespace-nowrap text-sm font-medium flex-1 text-gray-900 ${tdClassName}`}
             >
               <column.Cell
@@ -232,10 +228,7 @@ export function TableGenerator({
                 <div className="thead">
                   <div className="flex justify-between">
                     {columns.map((column) => {
-                      const columnID =
-                        typeof column.accessor === 'string'
-                          ? column.accessor
-                          : column.id
+                      const columnID = column.id || column.accessor
                       return (
                         <div
                           key={columnID}
