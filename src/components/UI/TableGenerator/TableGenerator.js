@@ -14,7 +14,7 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
 
   return (
     <input
-      className="shadow-sm px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+      className="shadow-sm w-full px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
       // value={filterValue || ''}
       value={value || ''}
       onClick={(e) => e.stopPropagation()}
