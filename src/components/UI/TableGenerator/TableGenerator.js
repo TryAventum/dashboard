@@ -84,7 +84,7 @@ export const TrComponent = React.forwardRef(
     },
     ref
   ) => {
-    const finalClassName = `flex justify-between ${
+    const finalClassName = `tr flex justify-between ${
       index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'
     } ${className}`
     let finalProps = { ...props, className: finalClassName }
@@ -99,7 +99,7 @@ export const TrComponent = React.forwardRef(
           return (
             <div
               key={column.id || column.accessor}
-              className={`px-6 py-4 whitespace-nowrap text-sm font-medium flex-1 text-gray-900 ${tdClassName}`}
+              className={`td px-6 py-4 whitespace-nowrap text-sm font-medium flex-1 text-gray-900 ${tdClassName}`}
             >
               <column.Cell
                 index={index}
@@ -247,7 +247,7 @@ export function TableGenerator({
                             }
                           }}
                           scope="col"
-                          className={`flex-1 text-center px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                          className={`th flex-1 text-center px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider ${
                             sort.sortBy === columnID && sort.sortOrder === 'ASC'
                               ? 'border-t-4'
                               : ''
