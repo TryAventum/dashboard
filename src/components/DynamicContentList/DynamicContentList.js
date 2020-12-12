@@ -74,25 +74,6 @@ function DynamicContentList({
   )
   const prevUndo = usePrevious(undoList)
 
-  const select = (event, item) => {
-    let newSelected
-    setSelectedState((selected) => {
-      if (selected.includes(item)) {
-        newSelected = selected.filter((e) => e !== item)
-      } else {
-        if (multiple) {
-          newSelected = [...selected, item]
-        } else {
-          newSelected = [item]
-        }
-      }
-
-      return newSelected
-    })
-
-    onChange(event, newSelected)
-  }
-
   useLayoutEffect(() => {
     if (firstUpdate.current) {
       firstUpdate.current = false
@@ -204,7 +185,22 @@ function DynamicContentList({
             return (
               <div className={'text-center'}>
                 <input
-                  onChange={(e) => select(e, props.value.id)}
+                  onChange={(e) => {
+                    let newSelected
+                    if (selectedState.includes(props.value.id)) {
+                      newSelected = selectedState.filter(
+                        (o) => o !== props.value.id
+                      )
+                    } else {
+                      if (multiple) {
+                        newSelected = [...selectedState, props.value.id]
+                      } else {
+                        newSelected = [props.value.id]
+                      }
+                    }
+                    setSelectedState(newSelected)
+                    onChange(e, newSelected)
+                  }}
                   checked={selectedState.includes(props.value.id)}
                   type="checkbox"
                 />
