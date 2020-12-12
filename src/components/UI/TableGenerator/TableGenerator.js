@@ -1,5 +1,6 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import isEqual from 'lodash/isEqual'
+import get from 'lodash/get'
 import Pagination from '../Pagination/Pagination'
 import { usePrevious } from '../../../shared/react-hooks'
 import Fuse from 'fuse.js'
@@ -109,7 +110,7 @@ export const TrComponent = React.forwardRef(
                 column={column}
                 value={
                   typeof column.accessor === 'string'
-                    ? row[column['accessor']]
+                    ? get(row, column['accessor'])
                     : column.accessor(row)
                 }
               />
