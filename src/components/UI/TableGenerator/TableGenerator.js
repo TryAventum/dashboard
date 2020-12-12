@@ -1,4 +1,5 @@
-import React, { useState, useReducer, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import Pagination from '../Pagination/Pagination'
@@ -8,6 +9,8 @@ import Loader from '../Loader/Loader'
 
 // Define a default UI for filtering
 function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
+  const { t } = useTranslation()
+
   return (
     <input
       className="shadow-sm w-full px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
@@ -28,7 +31,7 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
           }
         })
       }}
-      placeholder={`Filter...`}
+      placeholder={`${t('Filter')}...`}
     />
   )
 }
