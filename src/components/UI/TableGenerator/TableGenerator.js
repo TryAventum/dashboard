@@ -8,15 +8,9 @@ import Loader from '../Loader/Loader'
 
 // Define a default UI for filtering
 function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
-  // function DefaultColumnFilter({
-  //   column: { filterValue, preFilteredRows, setFilter },
-  // }) {
-  // const count = preFilteredRows.length
-
   return (
     <input
       className="shadow-sm w-full px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
-      // value={filterValue || ''}
       value={value || ''}
       onClick={(e) => e.stopPropagation()}
       onChange={(e) => {
@@ -32,9 +26,8 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
             delete nv[columnID]
             return nv
           }
-        }) // Set undefined to remove the filter entirely
+        })
       }}
-      // placeholder={`Search ${count} roles...`}
       placeholder={`Filter...`}
     />
   )
