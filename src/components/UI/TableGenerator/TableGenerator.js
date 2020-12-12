@@ -36,16 +36,16 @@ function DefaultColumnFilter({ columnID, setFilter: _setFilter, value }) {
 // Ascending Sorting
 const ascSort = (column) => {
   return (a, b) => {
-    var nameA = a[column].toUpperCase() // ignore upper and lowercase
-    var nameB = b[column].toUpperCase() // ignore upper and lowercase
-    if (nameA < nameB) {
+    var stringA = get(a, column).toUpperCase() // ignore upper and lowercase
+    var stringB = get(b, column).toUpperCase() // ignore upper and lowercase
+    if (stringA < stringB) {
       return -1
     }
-    if (nameA > nameB) {
+    if (stringA > stringB) {
       return 1
     }
 
-    // names must be equal
+    // strings must be equal
     return 0
   }
 }
@@ -53,16 +53,16 @@ const ascSort = (column) => {
 // Descending Sorting
 const descSort = (column) => {
   return (a, b) => {
-    var nameA = a[column].toUpperCase() // ignore upper and lowercase
-    var nameB = b[column].toUpperCase() // ignore upper and lowercase
-    if (nameA > nameB) {
+    var stringA = get(a, column).toUpperCase() // ignore upper and lowercase
+    var stringB = get(b, column).toUpperCase() // ignore upper and lowercase
+    if (stringA > stringB) {
       return -1
     }
-    if (nameA < nameB) {
+    if (stringA < stringB) {
       return 1
     }
 
-    // names must be equal
+    // strings must be equal
     return 0
   }
 }
