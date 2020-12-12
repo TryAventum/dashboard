@@ -72,14 +72,20 @@ const TranslationsTranslation = ({
                 {
                   Header: t('Key'),
                   accessor: 'key',
+                  canFilter: true,
+                  canSort: true,
                 },
                 {
                   Header: t('English'),
                   accessor: 'en',
+                  canFilter: true,
+                  canSort: true,
                 },
                 {
                   Header: t('Arabic'),
                   accessor: 'ar',
+                  canFilter: true,
+                  canSort: true,
                 },
               ]}
               type="dynamictable"
